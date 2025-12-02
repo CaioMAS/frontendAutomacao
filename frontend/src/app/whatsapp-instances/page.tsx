@@ -18,21 +18,43 @@ export default function WhatsAppInstancesPage() {
         loadInstances();
     }, []);
 
+    // Reload instances when page becomes visible (user returns to tab/page)
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                console.log('📱 Page visible, reloading instances...');
+                loadInstances();
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, []);
+
     const loadInstances = async () => {
         try {
             setLoadingList(true);
+            console.log('🔍 [Frontend] Loading instances...');
+
             const response = await fetch('/api/whatsapp/instances', {
                 credentials: 'include',
             });
 
+            console.log('🔍 [Frontend] Response status:', response.status);
+
             if (response.ok) {
                 const data = await response.json();
+                console.log('🔍 [Frontend] Received data:', data);
+                console.log('🔍 [Frontend] Instances count:', data.instances?.length || 0);
                 setInstances(data);
             } else {
-                console.error('Error loading instances');
+                console.error('❌ [Frontend] Error loading instances, status:', response.status);
             }
         } catch (err) {
-            console.error('Exception loading instances:', err);
+            console.error('❌ [Frontend] Exception loading instances:', err);
         } finally {
             setLoadingList(false);
         }

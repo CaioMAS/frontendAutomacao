@@ -7,6 +7,7 @@ export async function GET(request: NextRequest) {
     const sessionCookie = cookieStore.get('session')?.value;
 
     console.log('📱 [API whatsapp/instances] Listing WhatsApp instances');
+    console.log('🍪 [API whatsapp/instances] Session cookie:', sessionCookie ? 'EXISTS' : 'MISSING');
 
     if (!sessionCookie) {
       console.log('❌ [API whatsapp/instances] No session cookie found');
@@ -28,6 +29,7 @@ export async function GET(request: NextRequest) {
     console.log('📥 [API whatsapp/instances] Backend response status:', backendResponse.status);
 
     const data = await backendResponse.json();
+    console.log('📥 [API whatsapp/instances] Backend response data:', JSON.stringify(data, null, 2));
 
     if (!backendResponse.ok) {
       console.log('❌ [API whatsapp/instances] Backend returned error:', data);
@@ -38,6 +40,7 @@ export async function GET(request: NextRequest) {
     }
 
     console.log('✅ [API whatsapp/instances] Instances fetched successfully');
+    console.log('📊 [API whatsapp/instances] Returning data:', data);
     return NextResponse.json(data, { status: 200 });
 
   } catch (error) {

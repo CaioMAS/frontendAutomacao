@@ -3,48 +3,37 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext';
 
 export default function Dashboard() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuth();
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
     setError(null);
 
     try {
-      const response = await fetch('/api/auth/logout', {
+      const response = await fetch('/api/auth/logoff', {
         method: 'POST',
+        credentials: 'include',
       });
 
       if (response.ok) {
-        // The AuthProvider will automatically update the state
-        // and middleware will handle redirection if necessary.
-        // For a more immediate UI feedback, we can push the user manually.
-        router.push('/');
+        console.log('✅ Logout successful, redirecting to login');
+        // Redirect to login page
+        window.location.href = '/';
       } else {
         const data = await response.json();
         setError(data.message || 'Error logging out');
       }
     } catch (error) {
+      console.error('❌ Error during logout:', error);
       setError('An unexpected error occurred');
     } finally {
       setIsLoggingOut(false);
     }
   };
-  
-  if (isLoading) {
-    return <div className="flex justify-center items-center min-h-screen">Loading session...</div>;
-  }
-
-  if (!isAuthenticated) {
-    // This should ideally not be reached if middleware is effective.
-    // It can be a fallback or be removed if middleware is fully trusted.
-    return null; 
-  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">

@@ -9,34 +9,34 @@ export default function ConfigUserDetails({ config, onEdit }: ConfigUserDetailsP
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-1 gap-4">
-                <div className="border-b pb-2 flex items-center gap-2">
-                    <h3 className="text-sm font-medium text-gray-500">Instância Whatsapp SDR:</h3>
-                    <p className="text-lg text-gray-900">{config.instancia_sdr}</p>
+                <div className="border-b pb-2 flex flex-col sm:flex-row sm:items-center gap-2">
+                    <h3 className="text-sm font-medium text-gray-500 whitespace-nowrap">Instância Whatsapp SDR:</h3>
+                    <p className="text-lg text-gray-900 break-words">{config.instancia_sdr}</p>
                 </div>
 
-                <div className="border-b pb-2 flex items-center gap-2">
-                    <h3 className="text-sm font-medium text-gray-500">Nome do Closer:</h3>
-                    <p className="text-lg text-gray-900">{config.fixed_nome}</p>
+                <div className="border-b pb-2 flex flex-col sm:flex-row sm:items-center gap-2">
+                    <h3 className="text-sm font-medium text-gray-500 whitespace-nowrap">Nome do Closer:</h3>
+                    <p className="text-lg text-gray-900 break-words">{config.fixed_nome}</p>
                 </div>
 
-                <div className="border-b pb-2 flex items-center gap-2">
-                    <h3 className="text-sm font-medium text-gray-500">Whatsapp do Closer:</h3>
-                    <p className="text-lg text-gray-900">{config.numero_destino}</p>
+                <div className="border-b pb-2 flex flex-col sm:flex-row sm:items-center gap-2">
+                    <h3 className="text-sm font-medium text-gray-500 whitespace-nowrap">Whatsapp do Closer:</h3>
+                    <p className="text-lg text-gray-900 break-words">{config.numero_destino}</p>
                 </div>
 
-                <div className="border-b pb-2 flex items-center gap-2">
-                    <h3 className="text-sm font-medium text-gray-500">Instância Whatsapp Agente de IA:</h3>
-                    <p className="text-lg text-gray-900">{config.instancia_ia}</p>
+                <div className="border-b pb-2 flex flex-col sm:flex-row sm:items-center gap-2">
+                    <h3 className="text-sm font-medium text-gray-500 whitespace-nowrap">Instância Whatsapp Agente de IA:</h3>
+                    <p className="text-lg text-gray-900 break-words">{config.instancia_ia}</p>
                 </div>
 
-                <div className="border-b pb-2 flex items-center gap-2">
-                    <h3 className="text-sm font-medium text-gray-500">Número do Grupo Whatsapp:</h3>
-                    <p className="text-lg text-gray-900">{config.numero_fixo_grupo}</p>
+                <div className="border-b pb-2 flex flex-col sm:flex-row sm:items-center gap-2">
+                    <h3 className="text-sm font-medium text-gray-500 whitespace-nowrap">Número do Grupo Whatsapp:</h3>
+                    <p className="text-lg text-gray-900 break-words">{config.numero_fixo_grupo}</p>
                 </div>
 
-                <div className="border-b pb-2 flex items-center gap-2">
-                    <h3 className="text-sm font-medium text-gray-500">Email do Google Calendar:</h3>
-                    <p className="text-lg text-gray-900">{config.google_calendar_id}</p>
+                <div className="border-b pb-2 flex flex-col sm:flex-row sm:items-center gap-2">
+                    <h3 className="text-sm font-medium text-gray-500 whitespace-nowrap">Email do Google Calendar:</h3>
+                    <p className="text-lg text-gray-900 break-words">{config.google_calendar_id}</p>
                 </div>
             </div>
 

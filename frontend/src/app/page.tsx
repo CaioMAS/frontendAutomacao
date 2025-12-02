@@ -28,8 +28,8 @@ export default function Login() {
       if (response.ok) {
         const data = await response.json();
         if (data.status === 'success') {
-          console.log('Login successful, redirecting...');
-          router.push('/config-user');
+          console.log('✅ Login successful, redirecting to dashboard');
+          router.push('/dashboard');
         } else {
           // This case might not be reached if server always returns non-2xx on error
           setError('Falha ao autenticar.');

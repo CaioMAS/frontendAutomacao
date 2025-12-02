@@ -2,17 +2,32 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { api } from '@/services/api';
 
 const Sidebar = () => {
   const router = useRouter();
 
   const handleLogout = async () => {
     try {
-      await api.post('/logoff');
-      window.location.href = '/';
+      console.log('🚪 Logging out...');
+
+      const response = await fetch('/api/auth/logoff', {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        console.log('✅ Logout successful, redirecting to login');
+        // Redirect to login page
+        window.location.href = '/';
+      } else {
+        console.error('❌ Logout failed');
+        // Even on error, try to redirect to login
+        window.location.href = '/';
+      }
     } catch (error) {
-      console.error('An error occurred during logout', error);
+      console.error('❌ An error occurred during logout', error);
+      // Even on error, try to redirect to login
+      window.location.href = '/';
     }
   };
 

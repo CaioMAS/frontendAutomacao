@@ -1,7 +1,6 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import axios from 'axios';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -25,9 +24,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const checkUserSession = async () => {
       try {
-        const response = await axios.get('/api/auth/session');
-        if (response.status === 200 && response.data.isAuthenticated) {
-          setIsAuthenticated(true);
+        const response = await fetch('/api/auth/session', {
+          credentials: 'include',
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.isAuthenticated) {
+            setIsAuthenticated(true);
+          } else {
+            setIsAuthenticated(false);
+          }
+        } else {
+          setIsAuthenticated(false);
         }
       } catch (error) {
         // If the API returns 401 or any other error, the user is not authenticated.

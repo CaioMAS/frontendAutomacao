@@ -6,12 +6,19 @@ export async function GET(req: NextRequest) {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get('session')?.value;
 
+  console.log('🔍 [API config-user GET] Session cookie:', sessionCookie ? 'EXISTS' : 'MISSING');
+  console.log('🔍 [API config-user GET] All cookies:', cookieStore.getAll().map(c => c.name));
+
   if (!sessionCookie) {
+    console.log('❌ [API config-user GET] No session cookie found, returning 401');
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/config-user`, {
+    const backendUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/config-user`;
+    console.log('📡 [API config-user GET] Fetching from backend:', backendUrl);
+    
+    const response = await fetch(backendUrl, {
       headers: {
         'Cookie': `session=${sessionCookie}`,
         'Content-Type': 'application/json',
@@ -19,16 +26,21 @@ export async function GET(req: NextRequest) {
       cache: 'no-store',
     });
 
+    console.log('📥 [API config-user GET] Backend response status:', response.status);
+
     const data = await response.json();
+    console.log('📥 [API config-user GET] Backend response data:', data);
 
     if (!response.ok) {
+      console.log('❌ [API config-user GET] Backend returned error:', data);
       return NextResponse.json({ message: data.message || 'Error fetching user config' }, { status: response.status });
     }
 
+    console.log('✅ [API config-user GET] Success, returning data');
     return NextResponse.json(data, { status: 200 });
 
   } catch (error) {
-    console.error('Error in /api/config-user GET:', error);
+    console.error('❌ [API config-user GET] Exception:', error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }

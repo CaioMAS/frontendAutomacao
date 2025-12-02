@@ -5,8 +5,13 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { email, password } = body;
 
+    console.log('🔐 [API login] Attempting login for:', email);
+
     // Forward the request to the backend
-    const backendResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
+    const backendUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`;
+    console.log('📡 [API login] Forwarding to backend:', backendUrl);
+
+    const backendResponse = await fetch(backendUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -14,7 +19,10 @@ export async function POST(request: Request) {
       body: JSON.stringify({ email, password }),
     });
 
+    console.log('📥 [API login] Backend response status:', backendResponse.status);
+
     const data = await backendResponse.json();
+    console.log('📥 [API login] Backend response data:', data);
 
     // Create the Next.js response
     const response = NextResponse.json(data, {
@@ -23,13 +31,17 @@ export async function POST(request: Request) {
 
     // Forward the Set-Cookie header if present
     const setCookieHeader = backendResponse.headers.get('set-cookie');
+    console.log('🍪 [API login] Set-Cookie header from backend:', setCookieHeader ? 'EXISTS' : 'MISSING');
+    
     if (setCookieHeader) {
+      console.log('🍪 [API login] Forwarding Set-Cookie:', setCookieHeader.substring(0, 50) + '...');
       response.headers.set('Set-Cookie', setCookieHeader);
     }
 
+    console.log('✅ [API login] Login response sent');
     return response;
   } catch (error) {
-    console.error('Login proxy error:', error);
+    console.error('❌ [API login] Exception:', error);
     return NextResponse.json(
       { message: 'Internal Server Error' },
       { status: 500 }

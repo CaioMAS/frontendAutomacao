@@ -48,7 +48,9 @@ export default function WhatsAppGroupsPage() {
 
             if (response.ok) {
                 console.log('✅ Groups loaded:', data);
-                setGroups(data.groups || []);
+                // Backend returns array directly, or object with groups property
+                const groupsList = Array.isArray(data) ? data : (data.groups || []);
+                setGroups(groupsList);
             } else {
                 console.error('❌ Error loading groups:', data);
                 setError(data.message || 'Erro ao carregar grupos');

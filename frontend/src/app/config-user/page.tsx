@@ -1,26 +1,41 @@
 // frontend/src/app/config-user/page.tsx
-import { cookies } from 'next/headers';
-
 import { UserConfig } from '@/types/auth';
-import ConfigUserForm from './ConfigUserForm'; // We will create this client component
+import ConfigUserContainer from './ConfigUserContainer';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-async function fetchUserConfig(idToken: string): Promise<UserConfig | null> {
+// This Server Component now fetches data from the internal BFF endpoint.
+async function fetchUserConfig(cookieHeader: string): Promise<UserConfig | null> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/config-user`, {
+    // Construct the absolute URL for server-side fetching
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const absoluteUrl = `${baseUrl}/api/config-user`;
+
+    // We need to manually pass the cookie header for server-side fetch calls.
+    const response = await fetch(absoluteUrl, {
       headers: {
-        Authorization: `Bearer ${idToken}`,
+        'Cookie': cookieHeader,
       },
-      cache: 'no-store', // Ensure fresh data is fetched on every request
+      cache: 'no-store',
     });
 
-    if (!response.ok) {
-      // Log more details on error
-      const errorText = await response.text();
-      console.error(`Error fetching user config: ${response.status} ${response.statusText}`, errorText);
+    if (response.status === 401) {
+      // The BFF route determined the user is not authenticated
       return null;
     }
 
-    return await response.json();
+    if (!response.ok) {
+      console.error(`Error fetching user config: ${response.status} ${response.statusText}`);
+      return null;
+    }
+
+    const jsonResponse = await response.json();
+
+    if (jsonResponse.success && Array.isArray(jsonResponse.data) && jsonResponse.data.length > 0) {
+      return jsonResponse.data[0];
+    }
+
+    return null;
   } catch (error) {
     console.error('Error fetching user config:', error);
     return null;
@@ -28,30 +43,25 @@ async function fetchUserConfig(idToken: string): Promise<UserConfig | null> {
 }
 
 export default async function ConfigUserPage() {
-  console.log('--- EXECUTANDO O NOVO CÓDIGO DA PÁGINA CONFIG-USER ---');
-  const cookieStore: any = cookies();
-  const idToken = cookieStore.get('idToken')?.value;
+  // On the server, we need to get the cookies and pass them to the fetch call.
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.getAll().map(c => `${c.name}=${c.value}`).join('; ');
 
-  if (!idToken) {
-    // Handle unauthenticated state, e.g., redirect to login
-    // In a real app, you'd use middleware or a more robust auth solution
-    return (
-      <div className="flex h-screen items-center justify-center bg-gray-100">
-        <div className="text-center">
-          <p className="text-red-500">Você não está autenticado. Por favor, faça login.</p>
-          <p><a href="/" className="text-blue-500 hover:underline">Ir para Login</a></p>
-        </div>
-      </div>
-    );
+  // Check for authentication cookie (idToken or session)
+  const hasAuthCookie = cookieStore.has('idToken') || cookieStore.has('session');
+
+  if (!hasAuthCookie) {
+    redirect('/');
   }
 
-  const userConfig = await fetchUserConfig(idToken);
+  const userConfig = await fetchUserConfig(cookieHeader);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
       <div className="bg-white p-8 rounded-lg shadow-md max-w-2xl w-full">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Configurações do Usuário</h2>
-        <ConfigUserForm initialData={userConfig} idToken={idToken} />
+        {/* The client component now receives only the initial data, not the token */}
+        <ConfigUserContainer initialConfig={userConfig} />
       </div>
     </div>
   );

@@ -5,16 +5,14 @@ import { AuthResponse } from '@/types/auth';
 
 export async function POST(request: Request) {
   try {
-    const formData = await request.formData();
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
+    // 1. Read the request body as JSON
+    const { email, password } = await request.json();
 
     if (!email || !password) {
-      // Redirect back to login with an error message
-      return NextResponse.redirect(new URL('/?error=Missing email or password', request.url));
+      return NextResponse.json({ message: 'Missing email or password' }, { status: 400 });
     }
 
-    // 1. Call the external login API
+    // 2. Call the external login API
     const loginResponse = await axios.post<AuthResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
       email,
       password,
@@ -24,17 +22,15 @@ export async function POST(request: Request) {
     const { idToken, refreshToken } = loginResponse.data;
 
     if (!idToken || !refreshToken) {
-      // Redirect back to login with an error message
-      return NextResponse.redirect(new URL('/?error=Login failed, no tokens received', request.url));
+      return NextResponse.json({ message: 'Login failed, no tokens received' }, { status: 401 });
     }
 
-    // 2. Create a redirect response to the target page
-    const redirectUrl = new URL('/config-user', request.url);
-    const response = NextResponse.redirect(redirectUrl);
+    // 3. Create a success response
+    const response = NextResponse.json({ status: 'success' }, { status: 200 });
 
-    // 3. Set the cookies on the redirect response
+    // 4. Set the cookies on the success response
     response.cookies.set('idToken', idToken, {
-      httpOnly: true, // Let's make it HttpOnly again for security
+      httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60, // 1 hour
       path: '/',
@@ -53,8 +49,7 @@ export async function POST(request: Request) {
 
   } catch (error: any) {
     console.error('Login action error:', error);
-    // Redirect back to login with a generic error
-    const errorMessage = error.response?.data?.error?.message || 'Login failed';
-    return NextResponse.redirect(new URL(`/?error=${encodeURIComponent(errorMessage)}`, request.url));
+    const message = error.response?.data?.error?.message || 'Login failed';
+    return NextResponse.json({ message }, { status: error.response?.status || 500 });
   }
 }

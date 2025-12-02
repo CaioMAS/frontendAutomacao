@@ -3,7 +3,6 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  console.log(`[Middleware] Pathname: ${pathname}`); // Added log
 
   // Define protected routes (or patterns that should require authentication)
   const protectedRoutes = ['/dashboard', '/config-user', '/change-password'];
@@ -12,15 +11,14 @@ export function middleware(request: NextRequest) {
   const publicRoutes = ['/', '/forgot-password']; // Assuming '/' is the login page
 
   // Define API routes that don't require authentication (e.g., login, forgot-password, cookie setting)
-  const publicApiRoutes = ['/api/auth/login', '/api/auth/forgot-password', '/api/auth/set-cookies'];
+  const publicApiRoutes = ['/api/auth/login', '/api/auth/forgot-password', '/api/auth/set-cookies', '/api/auth/logout'];
 
   // Get idToken from cookies
-  const idToken = request.cookies.get('idToken')?.value;
-  console.log(`[Middleware] idToken present: ${!!idToken}`); // Added log
+  // Get idToken or session cookie
+  const idToken = request.cookies.get('idToken')?.value || request.cookies.get('session')?.value;
 
   // Check if the current path is an API route that is public
   if (publicApiRoutes.some(route => pathname.startsWith(route))) {
-    console.log('[Middleware] Public API route, continuing...'); // Added log
     return NextResponse.next();
   }
 
@@ -30,25 +28,21 @@ export function middleware(request: NextRequest) {
   if (isProtectedRoute) {
     if (!idToken) {
       // If no idToken, redirect to login page
-      console.log('[Middleware] Protected route without idToken, redirecting to /'); // Added log
       const url = request.nextUrl.clone();
       url.pathname = '/';
       return NextResponse.redirect(url);
     }
-    console.log('[Middleware] Protected route with idToken, continuing...'); // Added log
   }
 
   // If the user is trying to access a public route (like login or forgot-password) and is already authenticated,
   // redirect them to a dashboard (or another appropriate authenticated page).
   const isPublicRoute = publicRoutes.includes(pathname);
   if (isPublicRoute && idToken) {
-    console.log('[Middleware] Public route with idToken, redirecting to /config-user'); // Updated log
     const url = request.nextUrl.clone();
     url.pathname = '/config-user'; // Redirect to config-user if logged in
     return NextResponse.redirect(url);
   }
 
-  console.log('[Middleware] No specific redirect, continuing...'); // Added log
   return NextResponse.next();
 }
 

@@ -6,10 +6,11 @@ import { UserConfig } from '@/types/auth';
 
 interface ConfigUserFormProps {
   initialData: UserConfig | null;
-  idToken: string;
+  onCancel?: () => void;
+  onSuccess?: (config: UserConfig) => void;
 }
 
-export default function ConfigUserForm({ initialData, idToken }: ConfigUserFormProps) {
+export default function ConfigUserForm({ initialData, onCancel, onSuccess }: ConfigUserFormProps) {
   const [formData, setFormData] = useState<UserConfig>({
     instancia_sdr: '',
     fixed_nome: '',
@@ -43,20 +44,24 @@ export default function ConfigUserForm({ initialData, idToken }: ConfigUserFormP
     setLoading(true);
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/config-user`, 
+      // The request now goes to the internal BFF endpoint
+      const response = await axios.post('/api/config-user',
         formData,
         {
-          headers: {
-            Authorization: `Bearer ${idToken}`,
-          },
+          // withCredentials ensures the HttpOnly cookie is sent with the request
+          withCredentials: true,
         }
       );
       setMessage('Configurações salvas com sucesso!');
       console.log('User config saved:', response.data);
+      if (onSuccess) {
+        // Pass the latest data back to the parent component
+        onSuccess(formData);
+      }
     } catch (err: any) {
       console.error('Error saving user config:', err);
-      if (err.response && err.response.data && err.response.data.error) {
-        setError(err.response.data.error.message || 'Erro ao salvar as configurações.');
+      if (err.response && err.response.data && err.response.message) {
+        setError(err.response.data.message || 'Erro ao salvar as configurações.');
       } else {
         setError('Erro ao salvar as configurações. Tente novamente mais tarde.');
       }
@@ -175,13 +180,25 @@ export default function ConfigUserForm({ initialData, idToken }: ConfigUserFormP
         />
       </div>
 
-      <button
-        type="submit"
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-        disabled={loading}
-      >
-        {loading ? 'Salvando...' : 'Salvar Configurações'}
-      </button>
+      <div className="flex items-center justify-between gap-4">
+        {onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+            disabled={loading}
+          >
+            Cancelar
+          </button>
+        )}
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+          disabled={loading}
+        >
+          {loading ? 'Salvando...' : 'Salvar Configurações'}
+        </button>
+      </div>
     </form>
   );
 }

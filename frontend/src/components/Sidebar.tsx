@@ -96,6 +96,12 @@ const Sidebar = () => {
             Instâncias WhatsApp
           </Link>
           <Link
+            href="/whatsapp-groups"
+            className="block p-2 rounded hover:bg-gray-700 transition-colors"
+          >
+            Grupos WhatsApp
+          </Link>
+          <Link
             href="/integration-wpp"
             className="block p-2 rounded hover:bg-gray-700 transition-colors"
           >

@@ -46,3 +46,15 @@ export interface ListInstancesResponse {
   count: number;
   limit: number;
 }
+
+export interface WhatsAppGroup {
+  id: string;
+  subject: string;
+  creation?: number;
+  owner?: string;
+  participants?: number;
+}
+
+export interface ListGroupsResponse {
+  groups: WhatsAppGroup[];
+}

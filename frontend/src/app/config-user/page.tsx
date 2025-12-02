@@ -56,9 +56,9 @@ export default async function ConfigUserPage() {
 
   const { data: userConfig, status } = await fetchUserConfig(cookieHeader);
 
-  // If 401 (session revoked or invalid), redirect to logout to clear cookies
+  // If 401 (session revoked or invalid), redirect to logoff to clear cookies
   if (status === 401) {
-    redirect('/api/auth/logout');
+    redirect('/api/auth/logoff');
   }
 
   return (

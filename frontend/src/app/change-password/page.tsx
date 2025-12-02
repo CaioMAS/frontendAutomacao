@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
 export default function ChangePassword() {
@@ -22,40 +21,41 @@ export default function ChangePassword() {
       return;
     }
 
-    // TODO: Obtain idToken securely from HttpOnly cookie
-    // For now, we'll simulate getting it. In a real app, you'd fetch it from a secure endpoint
-    // or through a server component context.
-    // Example: const idToken = await fetch('/api/get-id-token').then(res => res.json()).then(data => data.idToken);
-    const idToken = "YOUR_ID_TOKEN_HERE"; // Placeholder
 
-    if (!idToken || idToken === "YOUR_ID_TOKEN_HERE") {
-        setError('Token de autenticação não encontrado. Faça login novamente.');
-        // router.push('/'); // Redirect to login if no token
-        return;
-    }
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/change-password`, 
-        { newPassword },
-        {
-          headers: {
-            Authorization: `Bearer ${idToken}`,
-          },
-        }
-      );
-      setMessage('Sua senha foi alterada com sucesso!');
-      setNewPassword('');
-      setConfirmPassword('');
-      console.log('Change password response:', response.data);
-      // Optionally redirect to a profile page or dashboard after successful change
-      // router.push('/dashboard');
-    } catch (err: any) {
-      console.error('Change password error:', err);
-      if (err.response && err.response.data && err.response.data.error) {
-        setError(err.response.data.error.message || 'Erro ao alterar a senha.');
+      console.log('🔐 Changing password...');
+
+      const response = await fetch('/api/auth/change-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ newPassword }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log('✅ Password changed successfully');
+
+        // Call logoff to clear session since backend revoked it
+        await fetch('/api/auth/logoff', {
+          method: 'POST',
+          credentials: 'include',
+        });
+
+        // Redirect to login with success message
+        alert('Senha alterada com sucesso! Faça login novamente com sua nova senha.');
+        window.location.href = '/';
       } else {
-        setError('Erro ao alterar a senha. Tente novamente mais tarde.');
+        console.error('❌ Error changing password:', data);
+        setError(data.message || 'Erro ao alterar a senha.');
       }
+    } catch (err: any) {
+      console.error('❌ Exception during password change:', err);
+      setError('Erro ao alterar a senha. Tente novamente mais tarde.');
     }
   };
 

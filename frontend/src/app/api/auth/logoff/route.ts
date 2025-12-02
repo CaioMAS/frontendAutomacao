@@ -60,3 +60,26 @@ export async function POST() {
     return response;
   }
 }
+
+// GET handler for redirects (e.g., from config-user page on 401)
+export async function GET() {
+  try {
+    console.log('🚪 [API logoff GET] Clearing session cookies and redirecting');
+    
+    // Create a redirect response to the login page
+    const response = NextResponse.redirect(
+      new URL('/', process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000')
+    );
+
+    // Delete all auth-related cookies
+    response.cookies.delete('session');
+    response.cookies.delete('idToken');
+    response.cookies.delete('refreshToken');
+
+    console.log('✅ [API logoff GET] Cookies cleared, redirecting to login');
+    return response;
+  } catch (error) {
+    console.error('❌ [API logoff GET] Error:', error);
+    return NextResponse.json({ message: 'Error logging out' }, { status: 500 });
+  }
+}

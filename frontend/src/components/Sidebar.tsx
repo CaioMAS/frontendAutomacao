@@ -6,7 +6,7 @@ import { useSidebar } from '@/context/SidebarContext';
 
 const Sidebar = () => {
   const router = useRouter();
-  const { isOpen, toggleSidebar } = useSidebar();
+  const { isOpen, toggleSidebar, closeSidebar } = useSidebar();
 
   const handleLogout = async () => {
     try {
@@ -27,6 +27,13 @@ const Sidebar = () => {
     } catch (error) {
       console.error('❌ An error occurred during logout', error);
       window.location.href = '/';
+    }
+  };
+
+  const handleLinkClick = () => {
+    // Close sidebar only on mobile (md breakpoint is 768px)
+    if (window.innerWidth < 768) {
+      closeSidebar();
     }
   };
 
@@ -68,6 +75,13 @@ const Sidebar = () => {
       </button>
 
 
+      {/* Mobile Backdrop */}
+      <div
+        className={`fixed inset-0 bg-black/50 z-30 md:hidden transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        onClick={toggleSidebar}
+        aria-hidden="true"
+      />
+
       {/* Sidebar */}
       <div
         className={`
@@ -88,30 +102,35 @@ const Sidebar = () => {
         <nav className="flex-1 p-4 space-y-2">
           <Link
             href="/dashboard"
+            onClick={handleLinkClick}
             className="block p-3 rounded-lg hover:bg-slate-700 hover:text-white transition-all duration-200 text-slate-400 font-medium"
           >
             Dashboard
           </Link>
           <Link
             href="/whatsapp-instances"
+            onClick={handleLinkClick}
             className="block p-3 rounded-lg hover:bg-slate-700 hover:text-white transition-all duration-200 text-slate-400 font-medium"
           >
             Instâncias WhatsApp
           </Link>
           <Link
             href="/whatsapp-groups"
+            onClick={handleLinkClick}
             className="block p-3 rounded-lg hover:bg-slate-700 hover:text-white transition-all duration-200 text-slate-400 font-medium"
           >
             Grupos WhatsApp
           </Link>
           <Link
             href="/integration-wpp"
+            onClick={handleLinkClick}
             className="block p-3 rounded-lg hover:bg-slate-700 hover:text-white transition-all duration-200 text-slate-400 font-medium"
           >
             Números de WhatsApp
           </Link>
           <Link
             href="/config-user"
+            onClick={handleLinkClick}
             className="block p-3 rounded-lg hover:bg-slate-700 hover:text-white transition-all duration-200 text-slate-400 font-medium"
           >
             Configuração do usuário

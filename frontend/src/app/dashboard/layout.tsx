@@ -15,9 +15,9 @@ export default function DashboardLayout({
       <Sidebar />
       <main
         className={`
-          flex-1 p-4 md:p-6 lg:p-8 overflow-auto bg-slate-900 w-full
+          flex-1 px-4 pb-4 pt-16 md:p-6 md:pt-16 lg:p-8 lg:pt-16 overflow-auto bg-slate-900 w-full
           transition-all duration-300
-          ${isOpen ? 'ml-64' : 'ml-0'}
+          ${isOpen ? 'md:ml-64' : 'ml-0'}
         `}
       >
         {children}

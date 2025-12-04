@@ -13,6 +13,13 @@ export default function WhatsAppInstancesPage() {
     const [instances, setInstances] = useState<ListInstancesResponse | null>(null);
     const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
+    // Modal state
+    const [selectedInstance, setSelectedInstance] = useState<UserInstance | null>(null);
+    const [statusData, setStatusData] = useState<any>(null);
+    const [qrCodeData, setQrCodeData] = useState<string | null>(null);
+    const [loadingStatus, setLoadingStatus] = useState(false);
+    const [loadingConnect, setLoadingConnect] = useState(false);
+
     // Load instances on mount
     useEffect(() => {
         loadInstances();
@@ -124,6 +131,9 @@ export default function WhatsAppInstancesPage() {
                 if (instanceData?.instance.instanceName === instanceName) {
                     setInstanceData(null);
                 }
+                if (selectedInstance?.instanceName === instanceName) {
+                    closeModal();
+                }
             } else {
                 const data = await response.json();
                 setError(data.message || 'Erro ao deletar instância');
@@ -132,6 +142,53 @@ export default function WhatsAppInstancesPage() {
             console.error('❌ Exception during instance deletion:', err);
             setError('Erro ao deletar instância. Tente novamente mais tarde.');
         }
+    };
+
+    const openInstanceDetails = async (instance: UserInstance) => {
+        setSelectedInstance(instance);
+        setStatusData(null);
+        setQrCodeData(null);
+        setLoadingStatus(true);
+
+        try {
+            // Use instanceName as the ID for the API call
+            const response = await fetch(`/api/whatsapp/${instance.instanceName}/status`);
+            if (response.ok) {
+                const data = await response.json();
+                setStatusData(data);
+            }
+        } catch (err) {
+            console.error('Error fetching status:', err);
+        } finally {
+            setLoadingStatus(false);
+        }
+    };
+
+    const handleConnect = async () => {
+        if (!selectedInstance) return;
+        setLoadingConnect(true);
+        setQrCodeData(null);
+
+        try {
+            // Use instanceName as the ID for the API call
+            const response = await fetch(`/api/whatsapp/${selectedInstance.instanceName}/connect`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.base64) {
+                    setQrCodeData(data.base64);
+                }
+            }
+        } catch (err) {
+            console.error('Error connecting:', err);
+        } finally {
+            setLoadingConnect(false);
+        }
+    };
+
+    const closeModal = () => {
+        setSelectedInstance(null);
+        setStatusData(null);
+        setQrCodeData(null);
     };
 
     const isLimitReached = !!(instances && instances.count >= instances.limit);
@@ -166,7 +223,8 @@ export default function WhatsAppInstancesPage() {
                         {instances.instances.map((instance) => (
                             <div
                                 key={instance.id}
-                                className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                                className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                                onClick={() => openInstanceDetails(instance)}
                             >
                                 <div>
                                     <h3 className="font-semibold text-gray-800">{instance.instanceName}</h3>
@@ -174,12 +232,18 @@ export default function WhatsAppInstancesPage() {
                                         Criada em: {new Date(instance.createdAt).toLocaleDateString('pt-BR')}
                                     </p>
                                 </div>
-                                <button
-                                    onClick={() => setDeleteConfirm(instance.instanceName)}
-                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-colors"
-                                >
-                                    Excluir
-                                </button>
+                                <div className="flex items-center gap-4">
+                                    <span className="text-sm text-blue-600 hover:underline">Gerenciar</span>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setDeleteConfirm(instance.instanceName);
+                                        }}
+                                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-colors"
+                                    >
+                                        Excluir
+                                    </button>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -233,7 +297,7 @@ export default function WhatsAppInstancesPage() {
                 )}
             </div>
 
-            {/* QR Code Display */}
+            {/* QR Code Display (Initial Creation) */}
             {instanceData && (
                 <div className="bg-white rounded-lg shadow-md p-6">
                     <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -299,6 +363,81 @@ export default function WhatsAppInstancesPage() {
                                 <div className="text-center text-gray-500">
                                     <p>QR Code não disponível</p>
                                     <p className="text-sm mt-2">A instância pode já estar conectada</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Instance Details Modal */}
+            {selectedInstance && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-2xl font-bold text-gray-800">
+                                Detalhes da Instância: {selectedInstance.instanceName}
+                            </h3>
+                            <button onClick={closeModal} className="text-gray-500 hover:text-gray-700">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="space-y-6">
+                            {/* Status Section */}
+                            <div className="bg-gray-50 p-4 rounded-lg">
+                                <h4 className="font-semibold text-gray-700 mb-2">Status da Conexão</h4>
+                                {loadingStatus ? (
+                                    <p className="text-gray-500">Verificando status...</p>
+                                ) : statusData ? (
+                                    <div className="flex items-center gap-3">
+                                        <span className={`inline-block w-3 h-3 rounded-full ${statusData.instance?.state === 'open' ? 'bg-green-500' : 'bg-red-500'
+                                            }`}></span>
+                                        <span className="font-medium">
+                                            {statusData.instance?.state === 'open' ? 'Conectado' : 'Desconectado'}
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <p className="text-red-500">Não foi possível obter o status.</p>
+                                )}
+                            </div>
+
+                            {/* Connection Action */}
+                            {(!statusData || statusData.instance?.state !== 'open') && (
+                                <div className="border-t pt-6">
+                                    <h4 className="font-semibold text-gray-700 mb-4">Conectar WhatsApp</h4>
+
+                                    {!qrCodeData ? (
+                                        <button
+                                            onClick={handleConnect}
+                                            disabled={loadingConnect}
+                                            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded transition-colors disabled:bg-green-300"
+                                        >
+                                            {loadingConnect ? 'Gerando QR Code...' : 'Gerar QR Code'}
+                                        </button>
+                                    ) : (
+                                        <div className="flex flex-col items-center space-y-4">
+                                            <div className="bg-white p-4 rounded-lg shadow border">
+                                                <Image
+                                                    src={qrCodeData}
+                                                    alt="QR Code para conexão"
+                                                    width={250}
+                                                    height={250}
+                                                />
+                                            </div>
+                                            <p className="text-sm text-gray-600">
+                                                Escaneie o QR Code acima com seu WhatsApp para conectar.
+                                            </p>
+                                            <button
+                                                onClick={() => setQrCodeData(null)}
+                                                className="text-sm text-blue-600 hover:underline"
+                                            >
+                                                Gerar novo código
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

@@ -62,9 +62,9 @@ export default async function ConfigUserPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md max-w-2xl w-full">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Configurações do Usuário</h2>
+    <div className="flex min-h-screen items-center justify-center bg-slate-900 p-4">
+      <div className="bg-slate-800 p-8 rounded-lg shadow-lg max-w-2xl w-full border border-slate-700">
+        <h2 className="text-3xl font-bold text-slate-100 mb-6 text-center">Configurações do Usuário</h2>
         {/* The client component now receives only the initial data, not the token */}
         <ConfigUserContainer initialConfig={userConfig} />
       </div>

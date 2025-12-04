@@ -37,32 +37,32 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-4xl">
-      <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Dashboard</h1>
-      <p className="text-base md:text-lg text-gray-600 mb-6">Bem-vindo(a) ao seu painel!</p>
+      <h1 className="text-3xl md:text-4xl font-bold text-slate-100 mb-4">Dashboard</h1>
+      <p className="text-base md:text-lg text-slate-400 mb-6">Bem-vindo(a) ao seu painel!</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <Link
           href="/config-user"
-          className="block text-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded transition-colors"
+          className="block text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg hover:shadow-indigo-500/20"
         >
           Configurações do Usuário
         </Link>
         <Link
           href="/change-password"
-          className="block text-center bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-4 rounded transition-colors"
+          className="block text-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg hover:shadow-emerald-500/20"
         >
           Alterar Senha
         </Link>
         <button
           onClick={handleLogout}
           disabled={isLoggingOut}
-          className="w-full text-center bg-red-500 hover:bg-red-700 disabled:bg-red-300 text-white font-bold py-3 px-4 rounded transition-colors"
+          className="w-full text-center bg-red-600 hover:bg-red-700 disabled:bg-red-900/50 text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg hover:shadow-red-500/20"
         >
           {isLoggingOut ? 'Saindo...' : 'Sair'}
         </button>
       </div>
 
-      {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+      {error && <p className="text-red-400 mt-4 text-center">{error}</p>}
     </div>
   );
 }

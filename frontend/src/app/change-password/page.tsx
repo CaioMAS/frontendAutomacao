@@ -21,8 +21,6 @@ export default function ChangePassword() {
       return;
     }
 
-
-
     try {
       console.log('🔐 Changing password...');
 
@@ -60,42 +58,42 @@ export default function ChangePassword() {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Alterar Senha</h2>
+    <div className="flex h-screen items-center justify-center bg-slate-900">
+      <div className="bg-slate-800 p-8 rounded-lg shadow-lg max-w-md w-full border border-slate-700">
+        <h2 className="text-3xl font-bold text-slate-100 mb-6 text-center">Alterar Senha</h2>
         {message && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <div className="bg-green-900/30 border border-green-600/50 text-green-200 px-4 py-3 rounded relative mb-4" role="alert">
             <span className="block sm:inline"> {message}</span>
           </div>
         )}
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <div className="bg-red-900/30 border border-red-600/50 text-red-200 px-4 py-3 rounded relative mb-4" role="alert">
             <strong className="font-bold">Erro:</strong>
             <span className="block sm:inline"> {error}</span>
           </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="newPassword" className="block text-gray-700 text-sm font-bold mb-2">
+            <label htmlFor="newPassword" className="block text-slate-300 text-sm font-bold mb-2">
               Nova Senha:
             </label>
             <input
               type="password"
               id="newPassword"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-100 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               required
             />
           </div>
           <div>
-            <label htmlFor="confirmPassword" className="block text-gray-700 text-sm font-bold mb-2">
+            <label htmlFor="confirmPassword" className="block text-slate-300 text-sm font-bold mb-2">
               Confirmar Senha:
             </label>
             <input
               type="password"
               id="confirmPassword"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-100 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
@@ -103,13 +101,13 @@ export default function ChangePassword() {
           </div>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full transition-colors"
           >
             Alterar Senha
           </button>
         </form>
         <div className="text-center mt-4">
-          <Link href="/dashboard" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+          <Link href="/dashboard" className="inline-block align-baseline font-bold text-sm text-indigo-400 hover:text-indigo-300">
             Voltar para o Dashboard
           </Link>
         </div>

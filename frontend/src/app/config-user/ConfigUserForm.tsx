@@ -193,7 +193,7 @@ export default function ConfigUserForm({ initialData, onCancel, onSuccess }: Con
         )}
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-[#100a30] via-[#17113e] to-[#100a30] hover:shadow-lg hover:shadow-[#100a30]/50 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
+          className="w-full bg-[#1ECC5D] hover:bg-[#1AB84E] text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
           disabled={loading}
         >
           {loading ? 'Salvando...' : 'Salvar Configurações'}

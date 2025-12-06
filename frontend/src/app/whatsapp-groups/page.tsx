@@ -116,7 +116,7 @@ export default function WhatsAppGroupsPage() {
                         </p>
                         <a
                             href="/whatsapp-instances"
-                            className="inline-block bg-gradient-to-r from-[#100a30] via-[#17113e] to-[#100a30] hover:shadow-lg hover:shadow-[#100a30]/50 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
+                            className="inline-block bg-[#1ECC5D] hover:bg-[#1AB84E] text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
                         >
                             Criar Instância
                         </a>
@@ -164,7 +164,7 @@ export default function WhatsAppGroupsPage() {
                                         onClick={() => copyToClipboard(group.id, group.id)}
                                         className={`px-4 py-3 rounded-xl font-semibold transition-all whitespace-nowrap ${copiedId === group.id
                                             ? 'bg-emerald-600 text-white'
-                                            : 'bg-gradient-to-r from-[#100a30] via-[#17113e] to-[#100a30] hover:shadow-lg hover:shadow-[#100a30]/50 text-white transform hover:scale-[1.02]'
+                                            : 'bg-[#1ECC5D] hover:bg-[#1AB84E] text-white transform hover:scale-[1.02]'
                                             }`}
                                     >
                                         {copiedId === group.id ? '✓ Copiado!' : 'Copiar ID'}

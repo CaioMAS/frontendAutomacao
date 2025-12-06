@@ -239,7 +239,7 @@ export default function WhatsAppInstancesPage() {
                                             e.stopPropagation();
                                             setDeleteConfirm(instance.instanceName);
                                         }}
-                                        className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-xl transition-all"
+                                        className="bg-[#EF4343] hover:bg-[#DC2626] text-white font-semibold py-2 px-4 rounded-xl transition-all"
                                     >
                                         Excluir
                                     </button>
@@ -283,7 +283,7 @@ export default function WhatsAppInstancesPage() {
                     <button
                         type="submit"
                         disabled={loading || !instanceName || !!isLimitReached}
-                        className="w-full md:w-auto bg-gradient-to-r from-[#100a30] via-[#17113e] to-[#100a30] hover:shadow-lg hover:shadow-[#100a30]/50 disabled:opacity-50 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
+                        className="w-full md:w-auto bg-[#1ECC5D] hover:bg-[#1AB84E] disabled:opacity-50 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
                     >
                         {loading ? 'Criando...' : 'Criar Instância'}
                     </button>
@@ -413,7 +413,7 @@ export default function WhatsAppInstancesPage() {
                                         <button
                                             onClick={handleConnect}
                                             disabled={loadingConnect}
-                                            className="bg-gradient-to-r from-emerald-600 to-green-600 hover:shadow-lg hover:shadow-emerald-600/50 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50"
+                                            className="bg-[#1ECC5D] hover:bg-[#1AB84E] text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50"
                                         >
                                             {loadingConnect ? 'Gerando QR Code...' : 'Gerar QR Code'}
                                         </button>
@@ -463,7 +463,7 @@ export default function WhatsAppInstancesPage() {
                             </button>
                             <button
                                 onClick={() => handleDeleteInstance(deleteConfirm)}
-                                className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-xl transition-all"
+                                className="flex-1 bg-[#EF4343] hover:bg-[#DC2626] text-white font-semibold py-3 px-4 rounded-xl transition-all"
                             >
                                 Excluir
                             </button>

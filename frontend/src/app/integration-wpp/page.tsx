@@ -130,7 +130,7 @@ export default function WhatsAppNumbersPage() {
                 </div>
                 <button
                   onClick={() => setDeleteConfirm(item.id)}
-                  className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-xl transition-all"
+                  className="bg-[#EF4343] hover:bg-[#DC2626] text-white font-semibold py-2 px-4 rounded-xl transition-all"
                 >
                   Excluir
                 </button>
@@ -177,7 +177,7 @@ export default function WhatsAppNumbersPage() {
           <button
             type="submit"
             disabled={loading || !newNumber || isLimitReached}
-            className="w-full md:w-auto bg-gradient-to-r from-[#100a30] via-[#17113e] to-[#100a30] hover:shadow-lg hover:shadow-[#100a30]/50 disabled:opacity-50 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
+            className="w-full md:w-auto bg-[#1ECC5D] hover:bg-[#1AB84E] disabled:opacity-50 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
           >
             {loading ? 'Cadastrando...' : 'Cadastrar Número'}
           </button>
@@ -208,7 +208,7 @@ export default function WhatsAppNumbersPage() {
               </button>
               <button
                 onClick={() => handleDeleteConfirm(deleteConfirm)}
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-xl transition-all"
+                className="flex-1 bg-[#EF4343] hover:bg-[#DC2626] text-white font-semibold py-3 px-4 rounded-xl transition-all"
               >
                 Excluir
               </button>

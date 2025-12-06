@@ -58,58 +58,88 @@ export default function ChangePassword() {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center bg-slate-900">
-      <div className="bg-slate-800 p-8 rounded-lg shadow-lg max-w-md w-full border border-slate-700">
-        <h2 className="text-3xl font-bold text-slate-100 mb-6 text-center">Alterar Senha</h2>
+    <div className="min-h-screen bg-gradient-to-br from-[#0a0520] via-[#100a30] to-[#17113e] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
+
+      <div className="max-w-md w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 relative z-10 border border-white/20">
+        {/* Logo/Title with gradient */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-[#100a30] via-[#17113e] to-[#100a30] bg-clip-text text-transparent mb-2">
+            Alterar Senha
+          </h2>
+          <div className="h-1 w-20 mx-auto bg-gradient-to-r from-transparent via-[#100a30] to-transparent rounded-full"></div>
+          <p className="text-sm text-gray-600 mt-4">
+            Crie uma nova senha para sua conta
+          </p>
+        </div>
+
         {message && (
-          <div className="bg-green-900/30 border border-green-600/50 text-green-200 px-4 py-3 rounded relative mb-4" role="alert">
-            <span className="block sm:inline"> {message}</span>
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6 backdrop-blur-sm" role="alert">
+            <span className="block sm:inline">{message}</span>
           </div>
         )}
+
         {error && (
-          <div className="bg-red-900/30 border border-red-600/50 text-red-200 px-4 py-3 rounded relative mb-4" role="alert">
-            <strong className="font-bold">Erro:</strong>
-            <span className="block sm:inline"> {error}</span>
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 backdrop-blur-sm" role="alert">
+            <strong className="font-bold">Erro: </strong>
+            <span className="block sm:inline">{error}</span>
           </div>
         )}
-        <form onSubmit={handleSubmit} className="space-y-4">
+
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="newPassword" className="block text-slate-300 text-sm font-bold mb-2">
-              Nova Senha:
+            <label htmlFor="newPassword" className="block text-sm font-semibold text-gray-700 mb-2">
+              Nova Senha
             </label>
             <input
               type="password"
               id="newPassword"
-              className="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-100 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#100a30] focus:border-transparent outline-none transition-all text-gray-900 placeholder-gray-400"
+              placeholder="Digite sua nova senha"
               required
             />
           </div>
+
           <div>
-            <label htmlFor="confirmPassword" className="block text-slate-300 text-sm font-bold mb-2">
-              Confirmar Senha:
+            <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-2">
+              Confirmar Senha
             </label>
             <input
               type="password"
               id="confirmPassword"
-              className="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-100 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#100a30] focus:border-transparent outline-none transition-all text-gray-900 placeholder-gray-400"
+              placeholder="Confirme sua nova senha"
               required
             />
           </div>
+
           <button
             type="submit"
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full transition-colors"
+            className="w-full bg-gradient-to-r from-[#100a30] via-[#17113e] to-[#100a30] hover:shadow-lg hover:shadow-[#100a30]/50 text-white font-semibold py-3.5 rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
           >
             Alterar Senha
           </button>
         </form>
-        <div className="text-center mt-4">
-          <Link href="/dashboard" className="inline-block align-baseline font-bold text-sm text-indigo-400 hover:text-indigo-300">
-            Voltar para o Dashboard
+
+        <div className="mt-6 pt-6 border-t border-gray-200 text-center">
+          <Link href="/dashboard" className="text-sm font-medium text-[#100a30] hover:text-[#17113e] transition-colors">
+            ← Voltar para o Dashboard
           </Link>
+        </div>
+
+        {/* Decorative bottom element */}
+        <div className="mt-4">
+          <p className="text-center text-xs text-gray-500">
+            Protegido por autenticação segura
+          </p>
         </div>
       </div>
     </div>

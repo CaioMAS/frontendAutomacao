@@ -196,13 +196,13 @@ export default function WhatsAppInstancesPage() {
     return (
         <div className="max-w-6xl mx-auto">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl md:text-4xl font-bold text-slate-100">
+                <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">
                     Gerenciar Instâncias WhatsApp
                 </h1>
                 {instances && (
                     <div className="text-right">
-                        <p className="text-sm text-slate-400">Instâncias criadas</p>
-                        <p className={`text-2xl font-bold ${isLimitReached ? 'text-red-400' : 'text-indigo-400'}`}>
+                        <p className="text-sm text-white/80 drop-shadow">Instâncias criadas</p>
+                        <p className={`text-2xl font-bold drop-shadow-lg ${isLimitReached ? 'text-red-300' : 'text-white'}`}>
                             {instances.count} / {instances.limit}
                         </p>
                     </div>
@@ -211,35 +211,35 @@ export default function WhatsAppInstancesPage() {
 
             {/* Instances List */}
             {loadingList ? (
-                <div className="bg-slate-800 rounded-lg shadow-lg p-6 mb-6 border border-slate-700">
-                    <p className="text-center text-slate-400">Carregando instâncias...</p>
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 mb-6 border border-gray-200">
+                    <p className="text-center text-gray-600">Carregando instâncias...</p>
                 </div>
             ) : instances && instances.instances.length > 0 ? (
-                <div className="bg-slate-800 rounded-lg shadow-lg p-6 mb-6 border border-slate-700">
-                    <h2 className="text-2xl font-bold text-slate-100 mb-4">
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 mb-6 border border-gray-200">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4">
                         Suas Instâncias
                     </h2>
                     <div className="space-y-3">
                         {instances.instances.map((instance) => (
                             <div
                                 key={instance.id}
-                                className="flex items-center justify-between p-4 border border-slate-700 rounded-lg hover:bg-slate-700/50 transition-colors cursor-pointer"
+                                className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
                                 onClick={() => openInstanceDetails(instance)}
                             >
                                 <div>
-                                    <h3 className="font-semibold text-slate-100">{instance.instanceName}</h3>
-                                    <p className="text-sm text-slate-400">
+                                    <h3 className="font-semibold text-gray-900">{instance.instanceName}</h3>
+                                    <p className="text-sm text-gray-600">
                                         Criada em: {new Date(instance.createdAt).toLocaleDateString('pt-BR')}
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <span className="text-sm text-indigo-400 hover:text-indigo-300 hover:underline">Gerenciar</span>
+                                    <span className="text-sm text-[#100a30] hover:text-[#17113e] hover:underline font-medium">Gerenciar</span>
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             setDeleteConfirm(instance.instanceName);
                                         }}
-                                        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-colors"
+                                        className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-xl transition-all"
                                     >
                                         Excluir
                                     </button>
@@ -251,13 +251,13 @@ export default function WhatsAppInstancesPage() {
             ) : null}
 
             {/* Create Instance Form */}
-            <div className="bg-slate-800 rounded-lg shadow-lg p-6 mb-6 border border-slate-700">
-                <h2 className="text-2xl font-bold text-slate-100 mb-4">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 mb-6 border border-gray-200">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
                     Criar Nova Instância
                 </h2>
 
                 {isLimitReached && (
-                    <div className="mb-4 bg-yellow-900/30 border border-yellow-600/50 text-yellow-200 px-4 py-3 rounded">
+                    <div className="mb-4 bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-xl">
                         <strong className="font-bold">Limite atingido! </strong>
                         <span>Você já possui {instances?.limit} instâncias. Exclua uma para criar uma nova.</span>
                     </div>
@@ -265,7 +265,7 @@ export default function WhatsAppInstancesPage() {
 
                 <form onSubmit={handleCreateInstance} className="space-y-4">
                     <div>
-                        <label htmlFor="instanceName" className="block text-sm font-medium text-slate-300 mb-2">
+                        <label htmlFor="instanceName" className="block text-sm font-semibold text-gray-700 mb-2">
                             Nome da Instância
                         </label>
                         <input
@@ -273,7 +273,7 @@ export default function WhatsAppInstancesPage() {
                             id="instanceName"
                             value={instanceName}
                             onChange={(e) => setInstanceName(e.target.value)}
-                            className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-md text-slate-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-slate-500"
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-[#100a30] focus:border-transparent placeholder-gray-400 outline-none transition-all"
                             placeholder="Ex: minha-instancia"
                             required
                             disabled={loading || !!isLimitReached}
@@ -283,14 +283,14 @@ export default function WhatsAppInstancesPage() {
                     <button
                         type="submit"
                         disabled={loading || !instanceName || !!isLimitReached}
-                        className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-900/50 text-white font-bold py-2 px-6 rounded transition-colors"
+                        className="w-full md:w-auto bg-gradient-to-r from-[#100a30] via-[#17113e] to-[#100a30] hover:shadow-lg hover:shadow-[#100a30]/50 disabled:opacity-50 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
                     >
                         {loading ? 'Criando...' : 'Criar Instância'}
                     </button>
                 </form>
 
                 {error && (
-                    <div className="mt-4 bg-red-900/30 border border-red-600/50 text-red-200 px-4 py-3 rounded">
+                    <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
                         <strong className="font-bold">Erro: </strong>
                         <span>{error}</span>
                     </div>
@@ -299,8 +299,8 @@ export default function WhatsAppInstancesPage() {
 
             {/* QR Code Display (Initial Creation) */}
             {instanceData && (
-                <div className="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
-                    <h2 className="text-2xl font-bold text-slate-100 mb-4">
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 border border-gray-200">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4">
                         Conectar WhatsApp
                     </h2>
 
@@ -308,12 +308,12 @@ export default function WhatsAppInstancesPage() {
                         {/* Instance Info */}
                         <div className="space-y-4">
                             <div>
-                                <h3 className="text-sm font-medium text-slate-400">Nome da Instância</h3>
-                                <p className="text-lg text-slate-100 font-semibold">{instanceData.instance.instanceName}</p>
+                                <h3 className="text-sm font-semibold text-gray-700">Nome da Instância</h3>
+                                <p className="text-lg text-gray-900 font-semibold">{instanceData.instance.instanceName}</p>
                             </div>
 
                             <div>
-                                <h3 className="text-sm font-medium text-slate-400">Status</h3>
+                                <h3 className="text-sm font-semibold text-gray-700">Status</h3>
                                 <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${instanceData.instance.status === 'connected'
                                     ? 'bg-green-900/30 text-green-400'
                                     : instanceData.instance.status === 'connecting'
@@ -326,13 +326,13 @@ export default function WhatsAppInstancesPage() {
                             </div>
 
                             <div>
-                                <h3 className="text-sm font-medium text-slate-400">ID da Instância</h3>
-                                <p className="text-sm text-slate-300 break-all">{instanceData.instance.instanceId}</p>
+                                <h3 className="text-sm font-semibold text-gray-700">ID da Instância</h3>
+                                <p className="text-sm text-gray-600 break-all">{instanceData.instance.instanceId}</p>
                             </div>
 
-                            <div className="pt-4 border-t border-slate-700">
-                                <h3 className="text-sm font-medium text-slate-300 mb-2">Instruções:</h3>
-                                <ol className="list-decimal list-inside space-y-2 text-sm text-slate-400">
+                            <div className="pt-4 border-t border-gray-200">
+                                <h3 className="text-sm font-semibold text-gray-700 mb-2">Instruções:</h3>
+                                <ol className="list-decimal list-inside space-y-2 text-sm text-gray-600">
                                     <li>Abra o WhatsApp no seu celular</li>
                                     <li>Toque em Menu ou Configurações</li>
                                     <li>Toque em Aparelhos conectados</li>
@@ -343,7 +343,7 @@ export default function WhatsAppInstancesPage() {
                         </div>
 
                         {/* QR Code */}
-                        <div className="flex flex-col items-center justify-center bg-slate-900 rounded-lg p-6 border border-slate-700">
+                        <div className="flex flex-col items-center justify-center bg-gray-50 rounded-xl p-6 border border-gray-200">
                             {instanceData.qrcode.base64 ? (
                                 <div className="space-y-4">
                                     <div className="bg-white p-4 rounded-lg shadow-sm">
@@ -355,12 +355,12 @@ export default function WhatsAppInstancesPage() {
                                             className="w-full h-auto"
                                         />
                                     </div>
-                                    <p className="text-center text-sm text-slate-400">
+                                    <p className="text-center text-sm text-gray-600">
                                         Escaneie o QR Code com seu WhatsApp
                                     </p>
                                 </div>
                             ) : (
-                                <div className="text-center text-slate-500">
+                                <div className="text-center text-gray-500">
                                     <p>QR Code não disponível</p>
                                     <p className="text-sm mt-2">A instância pode já estar conectada</p>
                                 </div>
@@ -373,12 +373,12 @@ export default function WhatsAppInstancesPage() {
             {/* Instance Details Modal */}
             {selectedInstance && (
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-slate-800 rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-700 shadow-2xl">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-gray-200 shadow-2xl">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-2xl font-bold text-slate-100">
+                            <h3 className="text-2xl font-bold text-gray-900">
                                 Detalhes da Instância: {selectedInstance.instanceName}
                             </h3>
-                            <button onClick={closeModal} className="text-slate-400 hover:text-slate-200">
+                            <button onClick={closeModal} className="text-gray-600 hover:text-gray-900">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                 </svg>
@@ -387,33 +387,33 @@ export default function WhatsAppInstancesPage() {
 
                         <div className="space-y-6">
                             {/* Status Section */}
-                            <div className="bg-slate-900 p-4 rounded-lg border border-slate-700">
-                                <h4 className="font-semibold text-slate-300 mb-2">Status da Conexão</h4>
+                            <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 className="font-semibold text-gray-700 mb-2">Status da Conexão</h4>
                                 {loadingStatus ? (
-                                    <p className="text-slate-500">Verificando status...</p>
+                                    <p className="text-gray-500">Verificando status...</p>
                                 ) : statusData ? (
                                     <div className="flex items-center gap-3">
                                         <span className={`inline-block w-3 h-3 rounded-full ${statusData.instance?.state === 'open' ? 'bg-green-500' : 'bg-red-500'
                                             }`}></span>
-                                        <span className="font-medium text-slate-200">
+                                        <span className="font-medium text-gray-900">
                                             {statusData.instance?.state === 'open' ? 'Conectado' : 'Desconectado'}
                                         </span>
                                     </div>
                                 ) : (
-                                    <p className="text-red-400">Não foi possível obter o status.</p>
+                                    <p className="text-red-600">Não foi possível obter o status.</p>
                                 )}
                             </div>
 
                             {/* Connection Action */}
                             {(!statusData || statusData.instance?.state !== 'open') && (
-                                <div className="border-t border-slate-700 pt-6">
-                                    <h4 className="font-semibold text-slate-300 mb-4">Conectar WhatsApp</h4>
+                                <div className="border-t border-gray-200 pt-6">
+                                    <h4 className="font-semibold text-gray-700 mb-4">Conectar WhatsApp</h4>
 
                                     {!qrCodeData ? (
                                         <button
                                             onClick={handleConnect}
                                             disabled={loadingConnect}
-                                            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded transition-colors disabled:bg-emerald-900/50"
+                                            className="bg-gradient-to-r from-emerald-600 to-green-600 hover:shadow-lg hover:shadow-emerald-600/50 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50"
                                         >
                                             {loadingConnect ? 'Gerando QR Code...' : 'Gerar QR Code'}
                                         </button>
@@ -427,12 +427,12 @@ export default function WhatsAppInstancesPage() {
                                                     height={250}
                                                 />
                                             </div>
-                                            <p className="text-sm text-slate-400">
+                                            <p className="text-sm text-gray-600">
                                                 Escaneie o QR Code acima com seu WhatsApp para conectar.
                                             </p>
                                             <button
                                                 onClick={() => setQrCodeData(null)}
-                                                className="text-sm text-indigo-400 hover:underline"
+                                                className="text-sm text-[#100a30] hover:text-[#17113e] hover:underline font-medium"
                                             >
                                                 Gerar novo código
                                             </button>
@@ -448,22 +448,22 @@ export default function WhatsAppInstancesPage() {
             {/* Delete Confirmation Modal */}
             {deleteConfirm && (
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-slate-800 rounded-lg p-6 max-w-md w-full mx-4 border border-slate-700 shadow-2xl">
-                        <h3 className="text-xl font-bold text-slate-100 mb-4">Confirmar Exclusão</h3>
-                        <p className="text-slate-400 mb-6">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 max-w-md w-full mx-4 border border-gray-200 shadow-2xl">
+                        <h3 className="text-xl font-bold text-gray-900 mb-4">Confirmar Exclusão</h3>
+                        <p className="text-gray-600 mb-6">
                             Tem certeza que deseja excluir a instância <strong>{deleteConfirm}</strong>?
                             Isso desconectará o WhatsApp e não pode ser desfeito.
                         </p>
                         <div className="flex gap-4">
                             <button
                                 onClick={() => setDeleteConfirm(null)}
-                                className="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold py-2 px-4 rounded transition-colors"
+                                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-4 rounded-xl transition-all"
                             >
                                 Cancelar
                             </button>
                             <button
                                 onClick={() => handleDeleteInstance(deleteConfirm)}
-                                className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-colors"
+                                className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-xl transition-all"
                             >
                                 Excluir
                             </button>

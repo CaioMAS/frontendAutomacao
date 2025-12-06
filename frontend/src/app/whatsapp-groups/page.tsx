@@ -80,26 +80,26 @@ export default function WhatsAppGroupsPage() {
 
     return (
         <div className="max-w-6xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-100 mb-6">
+            <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg mb-6">
                 Grupos do WhatsApp
             </h1>
 
             {/* Instance Selector */}
-            <div className="bg-slate-800 rounded-lg shadow-lg p-6 mb-6 border border-slate-700">
-                <h2 className="text-2xl font-bold text-slate-100 mb-4">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 mb-6 border border-gray-200">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
                     Selecione uma Instância
                 </h2>
 
                 {instances && instances.instances.length > 0 ? (
                     <div>
-                        <label htmlFor="instance" className="block text-sm font-medium text-slate-300 mb-2">
+                        <label htmlFor="instance" className="block text-sm font-semibold text-gray-700 mb-2">
                             Instância WhatsApp
                         </label>
                         <select
                             id="instance"
                             value={selectedInstance}
                             onChange={(e) => handleInstanceChange(e.target.value)}
-                            className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-md text-slate-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:ring-2 focus:ring-[#100a30] focus:border-transparent outline-none transition-all"
                         >
                             <option value="">Selecione uma instância...</option>
                             {instances.instances.map((instance) => (
@@ -111,12 +111,12 @@ export default function WhatsAppGroupsPage() {
                     </div>
                 ) : (
                     <div className="text-center py-8">
-                        <p className="text-slate-400 mb-4">
+                        <p className="text-gray-600 mb-4">
                             Você não possui instâncias do WhatsApp criadas.
                         </p>
                         <a
                             href="/whatsapp-instances"
-                            className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition-colors"
+                            className="inline-block bg-gradient-to-r from-[#100a30] via-[#17113e] to-[#100a30] hover:shadow-lg hover:shadow-[#100a30]/50 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
                         >
                             Criar Instância
                         </a>
@@ -126,17 +126,17 @@ export default function WhatsAppGroupsPage() {
 
             {/* Groups List */}
             {selectedInstance && (
-                <div className="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
-                    <h2 className="text-2xl font-bold text-slate-100 mb-4">
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 border border-gray-200">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4">
                         Grupos Disponíveis
                     </h2>
 
                     {loading ? (
                         <div className="text-center py-8">
-                            <p className="text-slate-400">Carregando grupos...</p>
+                            <p className="text-gray-600">Carregando grupos...</p>
                         </div>
                     ) : error ? (
-                        <div className="bg-red-900/30 border border-red-600/50 text-red-200 px-4 py-3 rounded">
+                        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
                             <strong className="font-bold">Erro: </strong>
                             <span>{error}</span>
                         </div>
@@ -145,26 +145,26 @@ export default function WhatsAppGroupsPage() {
                             {groups.map((group) => (
                                 <div
                                     key={group.id}
-                                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 border border-slate-700 rounded-lg hover:bg-slate-700/50 transition-colors gap-3"
+                                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors gap-3"
                                 >
                                     <div className="flex-1">
-                                        <h3 className="font-semibold text-slate-100 text-lg">
+                                        <h3 className="font-semibold text-gray-900 text-lg">
                                             {group.subject}
                                         </h3>
-                                        <p className="text-sm text-slate-400 font-mono break-all">
+                                        <p className="text-sm text-gray-600 font-mono break-all">
                                             ID: {group.id}
                                         </p>
                                         {group.participants && (
-                                            <p className="text-xs text-slate-500 mt-1">
+                                            <p className="text-xs text-gray-500 mt-1">
                                                 {group.participants} participantes
                                             </p>
                                         )}
                                     </div>
                                     <button
                                         onClick={() => copyToClipboard(group.id, group.id)}
-                                        className={`px-4 py-2 rounded font-semibold transition-colors whitespace-nowrap ${copiedId === group.id
+                                        className={`px-4 py-3 rounded-xl font-semibold transition-all whitespace-nowrap ${copiedId === group.id
                                             ? 'bg-emerald-600 text-white'
-                                            : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                                            : 'bg-gradient-to-r from-[#100a30] via-[#17113e] to-[#100a30] hover:shadow-lg hover:shadow-[#100a30]/50 text-white transform hover:scale-[1.02]'
                                             }`}
                                     >
                                         {copiedId === group.id ? '✓ Copiado!' : 'Copiar ID'}
@@ -174,10 +174,10 @@ export default function WhatsAppGroupsPage() {
                         </div>
                     ) : (
                         <div className="text-center py-8">
-                            <p className="text-slate-400">
+                            <p className="text-gray-600">
                                 Nenhum grupo encontrado para esta instância.
                             </p>
-                            <p className="text-sm text-slate-500 mt-2">
+                            <p className="text-sm text-gray-500 mt-2">
                                 Certifique-se de que a instância está conectada e participa de grupos.
                             </p>
                         </div>

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-const BACKEND_URL = 'http://localhost:5556';
-
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -16,7 +14,8 @@ export async function DELETE(
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const response = await fetch(`${BACKEND_URL}/api/user-numbers/${id}`, {
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5556';
+    const response = await fetch(`${backendUrl}/api/user-numbers/${id}`, {
       method: 'DELETE',
       headers: {
         'Cookie': `session=${sessionCookie}`,

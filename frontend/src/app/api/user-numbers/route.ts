@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-const BACKEND_URL = 'http://localhost:5556';
-
 export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies();
@@ -12,7 +10,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const response = await fetch(`${BACKEND_URL}/api/user-numbers`, {
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5556';
+    const response = await fetch(`${backendUrl}/api/user-numbers`, {
       method: 'GET',
       headers: {
         'Cookie': `session=${sessionCookie}`,
@@ -50,7 +49,8 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
-    const response = await fetch(`${BACKEND_URL}/api/user-numbers`, {
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5556';
+    const response = await fetch(`${backendUrl}/api/user-numbers`, {
       method: 'POST',
       headers: {
         'Cookie': `session=${sessionCookie}`,
